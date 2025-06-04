@@ -1,6 +1,7 @@
 from django.shortcuts import render
 
-# clone_files/views.py
+# Create your views here.
+# docxcloner/views.py
 import os
 import zipfile
 import tempfile
@@ -42,5 +43,4 @@ def clone_view(request):
             return response
     else:
         form = CloneDocxForm()
-    return render(request, "clone_files/clone.html", {"form": form})
-
+    return render(request, "docxcloner/clone.html", {"form": form})

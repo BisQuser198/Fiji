@@ -1,0 +1,15 @@
+<!-- docxcloner/templates/docxcloner/clone.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DOCX Cloner</title>
+</head>
+<body>
+    <h1>DOCX Cloner</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Clone File</button>
+    </form>
+</body>
+</html>
