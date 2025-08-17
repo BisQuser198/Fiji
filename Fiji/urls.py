@@ -19,16 +19,21 @@ from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
 from django.conf.urls import include
+from django.shortcuts import render # getting landing page to work
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     # ... your other URLs
-    path('clone_files/', include('clone_files.urls')),
+    #path('clone_files/', include('clone_files.urls')),
+    path('clone_files/', include('clone_files.urls', namespace="clone_files")),
     path('docxcloner/', include('docxcloner.urls')),
-    path('investment/', include("investments.urls")),
-    path("docx_replace/", include("docx_replace.urls")),
+    #path('investment/', include("investments.urls")),
+    path("investment/", include("investments.urls", namespace="investments")),
+    # path("docx_replace/", include("docx_replace.urls")),
+    path("replace-docs/", include("docx_replace.urls", namespace="docx_replace")),
     path("dates/", include("dates.urls")),
-
+    path("", lambda request: render(request, "core/landing_page.html"), name="home"),
 ]
 
 if settings.DEBUG:
