@@ -25,6 +25,10 @@ urlpatterns = [
     # ... your other URLs
     path('clone_files/', include('clone_files.urls')),
     path('docxcloner/', include('docxcloner.urls')),
+    path('investment/', include("investments.urls")),
+    path("docx_replace/", include("docx_replace.urls")),
+    path("dates/", include("dates.urls")),
+
 ]
 
 if settings.DEBUG:

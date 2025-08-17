@@ -1,0 +1,23 @@
+<!-- investments/templates/investments/result.html -->
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Results</title>
+</head>
+<body>
+  <h1>Results</h1>
+  <p>Final Balance: {{ final }}</p>
+  <p>Net Profit: {{ profit }}</p>
+  <p>Total Invested: {{ invested }}</p>
+
+  <h2>Yearly Balance Chart</h2>
+  <img src="data:image/png;base64,{{ img }}" alt="Balance Chart"/>
+
+  <hr>
+  <h3>Run Again</h3>
+  <form method="post">{% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Re-Calculate</button>
+  </form>
+</body>
+</html>

@@ -3,6 +3,8 @@
 
 ## version 2 
 
+# open dialogue to change, pick a range of files
+
 # docx_utils.py
 import os
 import shutil

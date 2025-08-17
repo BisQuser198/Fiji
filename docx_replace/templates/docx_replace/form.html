@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Batch DOCX Replace</title>
+</head>
+<body>
+  <h1>Batch DOCX Find & Replace</h1>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Run Replacement</button>
+  </form>
+</body>
+</html>
