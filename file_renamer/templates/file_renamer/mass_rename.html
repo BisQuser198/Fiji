@@ -1,0 +1,39 @@
+<!-- file_renamer/templates/file_renamer/mass_rename.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Mass File Renamer</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; }
+        label { display: block; margin-top: 10px; }
+        input[type="checkbox"] { margin-right: 5px; }
+        .helptext { font-size: 0.8em; color: gray; }
+        ul.errorlist { color: red; list-style: none; padding: 0; }
+    </style>
+</head>
+<body>
+    <h1>Mass File Renamer</h1>
+    <p>Upload a zip, choose mode, and set rules. Files renamed in alphabetical order. Download new zip.</p>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% for field in form %}
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+            {% if field.help_text %}
+                <p class="helptext">{{ field.help_text|safe }}</p>
+            {% endif %}
+            {{ field.errors }}
+        {% endfor %}
+        <button type="submit" style="margin-top: 20px;">Rename and Download</button>
+    </form>
+    {% if form.non_field_errors %}
+        <ul class="errorlist">
+            {% for error in form.non_field_errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</body>
+</html>

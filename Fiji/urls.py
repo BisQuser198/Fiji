@@ -34,6 +34,7 @@ urlpatterns = [
     path("replace-docs/", include("docx_replace.urls", namespace="docx_replace")),
     path("dates/", include("dates.urls")),
     path("", lambda request: render(request, "core/landing_page.html"), name="home"),
+    path("file_renamer/", include("file_renamer.urls", namespace="file_renamer")),
 ]
 
 if settings.DEBUG:

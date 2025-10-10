@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'clone_files',
     'docxcloner',
     'core',
+    'file_renamer',
 ]
 
 MIDDLEWARE = [
