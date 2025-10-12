@@ -35,6 +35,7 @@ urlpatterns = [
     path("dates/", include("dates.urls")),
     path("", lambda request: render(request, "core/landing_page.html"), name="home"),
     path("file_renamer/", include("file_renamer.urls", namespace="file_renamer")),
+    path("uploader/", include("uploader.urls", namespace="uploader")),
 ]
 
 if settings.DEBUG:

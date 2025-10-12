@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head><title>Upload File</title></head>
+<body>
+  <h1>Upload a File</h1>
+  <form method="post" enctype="multipart/form-data">
+  {% comment %} <form action="" method="post"></form> {% endcomment %}
+    {% csrf_token %}
+    {{ form.as_p }} 
+    {% comment %} form.as_p == form as paragraph {% endcomment %}
+    <button type="submit">Upload</button>
+  </form>
+  <a href="{% url 'uploader:upload_list' %}">View Uploaded Files</a>
+</body>
+</html>

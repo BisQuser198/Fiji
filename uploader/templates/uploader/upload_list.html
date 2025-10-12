@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head><title>Uploaded Files</title></head>
+<body>
+  <h1>Files</h1>
+  <ul>
+    {% for u in uploads %}
+      <li>
+        {{ u.file.name }} ({{ u.uploaded_at }}) —
+  <a href="{% url 'uploader:process_upload' u.pk %}">Process</a>
+      </li>
+    {% empty %}
+      <li>No files uploaded yet.</li>
+    {% endfor %}
+  </ul>
+  <a href="{% url 'uploader:upload_file' %}">Upload More</a>
+</body>
+</html>

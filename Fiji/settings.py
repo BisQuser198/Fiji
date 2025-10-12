@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'docxcloner',
     'core',
     'file_renamer',
+    'uploader',
 ]
 
 MIDDLEWARE = [
@@ -130,6 +131,7 @@ STATICFILES_DIRS = [ BASE_DIR / "static" ] # ATP include the static images
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# for uploading == whereuploaded files go
 import os
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
