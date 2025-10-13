@@ -17,7 +17,7 @@ project_root = os.path.dirname(current_dir)
 # 4) Print the project root to verify
 print("Project Root:", project_root)
 # 5) Build the path to the Raw Data folder and your document
-raw_data_folder = os.path.join(project_root, 'Raw Data')
+raw_data_folder = os.path.join(project_root, 'Raw Data') # all test files are in here
 doc_filename = 'test 1.docx'
 doc_path = os.path.join(raw_data_folder, doc_filename)
 # 6) Check I've reached my document:
