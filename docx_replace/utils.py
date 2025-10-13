@@ -18,43 +18,80 @@ from docx import Document
 
 def replace_placeholder_preserve_runs(para, placeholder, replacement):
     """
-    Scan through runs, detect placeholder spanning multiple runs,
-    and rewrite each run’s text segments so formatting remains intact.
-    Returns True if at least one replacement was done.
+    Replace `placeholder` with `replacement` inside a paragraph `para`
+    without altering run objects (so formatting is preserved).
+    Returns True if a replacement occurred, otherwise False.
     """
-    # Build cumulative mapping of runs → text offsets
-    cumulative = []
-    full_text = ""
-    for i, run in enumerate(para.runs):
-        text = run.text or ""
-        start = len(full_text)
-        full_text += text
-        end = len(full_text)
-        cumulative.append((i, start, end))
+ 
+    runs = para.runs
+    if not runs:
+        return False
+
+    # Build full text and record each run's length
+    lengths = []
+    parts = []
+    for r in runs:
+        text = r.text or ""
+        parts.append(text)
+        lengths.append(len(text))
+    full_text = "".join(parts)
 
     if placeholder not in full_text:
         return False
 
-    # Create the new full text with replacements
-    new_full = full_text.replace(placeholder, replacement)
+    # Replace in the combined text
+    new_text = full_text.replace(placeholder, replacement)
 
-    # Clear all runs
-    for run in para.runs:
-        run.text = ""
+    # Clear runs and re-slice new_text according to original run lengths
+    for r in runs:
+        r.text = ""
 
-    # Redistribute new_full across runs by original lengths
     pos = 0
-    for i, start, end in cumulative:
-        length = end - start
-        slice_text = new_full[pos : pos + length]
-        para.runs[i].text = slice_text
-        pos += length
+    for r, ln in zip(runs, lengths):
+        if ln:
+            r.text = new_text[pos: pos + ln]
+            pos += ln
 
-    # Append any leftover text to the last run
-    if pos < len(new_full):
-        para.runs[-1].text += new_full[pos:]
+    # Any leftover characters go to the last run (preserve formatting)
+    if pos < len(new_text):
+        runs[-1].text = (runs[-1].text or "") + new_text[pos:]
 
     return True
+
+
+    # # Build cumulative mapping of runs → text offsets
+    # cumulative = []
+    # full_text = ""
+    # for i, run in enumerate(para.runs):
+    #     text = run.text or ""
+    #     start = len(full_text)
+    #     full_text += text
+    #     end = len(full_text)
+    #     cumulative.append((i, start, end))
+
+    # if placeholder not in full_text:
+    #     return False
+
+    # # Create the new full text with replacements
+    # new_full = full_text.replace(placeholder, replacement)
+
+    # # Clear all runs
+    # for run in para.runs:
+    #     run.text = ""
+
+    # # Redistribute new_full across runs by original lengths
+    # pos = 0
+    # for i, start, end in cumulative:
+    #     length = end - start
+    #     slice_text = new_full[pos : pos + length]
+    #     para.runs[i].text = slice_text
+    #     pos += length
+
+    # # Append any leftover text to the last run
+    # if pos < len(new_full):
+    #     para.runs[-1].text += new_full[pos:]
+
+    # return True
 
 
 def col_letter_to_index(letter: str) -> int:
