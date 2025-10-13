@@ -32,7 +32,7 @@ def CS_game_view(request):
             # if user inputs url, then redirect to that url            
             return redirect(target_url)
     except KeyError as e:
-        logging.warning(f"KeyError: {e} - 'client_text' not found in context.")
+        logging.warning(f"KeyError: {e} - 'client_url' not found in context.")
 
     return render(request, "CS_game.html", context)
 
