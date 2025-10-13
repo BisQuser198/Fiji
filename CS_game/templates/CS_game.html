@@ -23,10 +23,18 @@
     <input type="submit" value="Click me / Send request to Server!">
 
     </form>
-    {% comment %} {% if {{ server_response }} %}
-    <p>Server's Response: {{ server_response }}</p>
-    {% else %}
-    {% endif %} {% endcomment %}
+
+ {% comment %} {% if submitted %}
+  {% for key, value in submitted.items %}
+    <p>Client's {{ key }}: {{ value }}</p>
+    <p>Server's Response: {{ value }}</p>
+  {% endfor %}
+{% endif %}  {% endcomment %}
+
+    {% if client_text %}
+    <p>Client's Text: {{ client_text }}</p>
+    <p>Server's Response: {{ client_text }}</p>
+    {% endif %} 
 
 </body>
 </html>
