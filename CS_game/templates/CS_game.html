@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client-Server Game</title>
+</head>
+<body>
+    <h1>You are the Client, I am the Server</h1>
+    <form action="" method="post">
+
+        {% csrf_token %}
+        
+    <p><input type="text" name="client_text" id=""> == Client's Text</p>
+    <p>OR</p>
+    <p><input type="url" name="client_url" id=""> == Client's URL</p>
+    <p>OR</p>
+    <p><input type="range" name="" id="client_range"> == Client's Range</p>
+    <p>OR</p>
+    <p><input type="email" name="client_email" id=""> == Client's Email</p>
+    <p>OR</p>
+    <p><input type="number" name="client_number" id=""> == Client's Number</p>
+    <input type="submit" value="Click me / Send request to Server!">
+
+    </form>
+    {% comment %} {% if {{ server_response }} %}
+    <p>Server's Response: {{ server_response }}</p>
+    {% else %}
+    {% endif %} {% endcomment %}
+
+</body>
+</html>

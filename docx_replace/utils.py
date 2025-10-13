@@ -23,7 +23,8 @@ def replace_placeholder_preserve_runs(para, placeholder, replacement):
     Returns True if a replacement occurred, otherwise False.
     """
  
-    runs = para.runs
+    runs = para.runs # Document module, calls the runs (segments with same style or formatting from a paragraph)
+    # doc = Document('example.docx') -> see explanation in tests.py
     if not runs:
         return False
 

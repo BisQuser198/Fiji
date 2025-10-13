@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'core',
     'file_renamer',
     'uploader',
+    'CS_game',
 ]
 
 MIDDLEWARE = [
