@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 import logging
 
 # Create your views here.
@@ -16,6 +16,24 @@ def CS_game_view(request):
         print("key, dict_value: ", key, dict_value)            # replace print with logger for better control
         if dict_value:
             context[key] = dict_value
+
+    try:
+        if context["client_text"]:
+            # reverse_client_text = context["client_text"][::-1]
+            # context["reversed_text"] = reverse_client_text
+            context["reversed_text"] = context["client_text"][::-1]
+            return render(request, "CS_game.html", context)
+    except KeyError as e:
+        logging.warning(f"KeyError: {e} - 'client_text' not found in context.")
+
+    try:
+        if context["client_url"]:
+            target_url = context["client_url"]
+            # if user inputs url, then redirect to that url            
+            return redirect(target_url)
+    except KeyError as e:
+        logging.warning(f"KeyError: {e} - 'client_text' not found in context.")
+
     return render(request, "CS_game.html", context)
 
 ## version 1
