@@ -37,6 +37,18 @@ def CS_game_view(request):
         if dict_value:
             context[key] = dict_value
 
+## version 4 - loop through submitted items
+    if 1 == 1:
+        submitted = {key: value for key, value in context.items() if value}
+    client_text = context.get("client_text")
+    if client_text:
+        context["reversed_text"] = client_text[::-1]
+
+    client_url = context.get("client_url")
+    if client_url:
+        return redirect(client_url)
+    return render(request, "CS_game.html", {"submitted": submitted, **context})
+
 ## version 3
     client_text = context.get("client_text") # replace if context b/c key might not exist
     if client_text:
