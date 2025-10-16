@@ -1,15 +1,35 @@
 from django.shortcuts import render, redirect
-import logging
+import logging, enum
 
 # Create your views here.
 
+# alternative way to add user input fields
+class Hard_Coded_Pairs(enum.Enum):
+    CLIENT_DATE = "client_date"
+    CLIENT_PASSWORD = "client_password"
 
-## version 2
+    def __str__(self):
+        return self.name
+    
+    @classmethod # return iteration of values in Hard_Coded_Pairs
+    def values(cls):
+        return [option.value for option in Hard_Coded_Pairs]
+    
+    @classmethod # return iteration of name-value pairs in Hard_Coded_Pairs
+    def pairs(cls):
+        return [(option.name, option.value) for option in Hard_Coded_Pairs]
+# variables values & pairs can be used in CS_game.html to add more input fields
+# must add to context
+
+# print(Hard_Coded_Pairs.values()) # OUT: ['client_date', 'client_password']
+# print(Hard_Coded_Pairs.pairs()) # OUT: [('CLIENT_DATE', 'client_date'), ('CLIENT_PASSWORD', 'client_password')]
+
 def CS_game_view(request):
     context = {}
     ## List of POST keys
     dict_keys = ["client_text", "client_url", "client_range", "client_email", "client_number"]
-
+    dict_keys.extend(Hard_Coded_Pairs.values())  # add more keys from Hard_Coded_Pairs
+    
     ## Populate context with only present, non-empty value
     for key in dict_keys:
         dict_value = request.POST.get(key)
@@ -17,24 +37,36 @@ def CS_game_view(request):
         if dict_value:
             context[key] = dict_value
 
-    try:
-        if context["client_text"]:
-            # reverse_client_text = context["client_text"][::-1]
-            # context["reversed_text"] = reverse_client_text
-            context["reversed_text"] = context["client_text"][::-1]
-            return render(request, "CS_game.html", context)
-    except KeyError as e:
-        logging.warning(f"KeyError: {e} - 'client_text' not found in context.")
-
-    try:
-        if context["client_url"]:
-            target_url = context["client_url"]
-            # if user inputs url, then redirect to that url            
-            return redirect(target_url)
-    except KeyError as e:
-        logging.warning(f"KeyError: {e} - 'client_url' not found in context.")
-
+## version 3
+    client_text = context.get("client_text") # replace if context b/c key might not exist
+    if client_text:
+        context["reversed_text"] = client_text[::-1]
+        return render(request, "CS_game.html", context)
+    
+    client_url = context.get("client_url")
+    if client_url:
+        return redirect(client_url)
     return render(request, "CS_game.html", context)
+
+## version 2
+    # try:
+    #     if context["client_text"]:
+    #         # reverse_client_text = context["client_text"][::-1]
+    #         # context["reversed_text"] = reverse_client_text
+    #         context["reversed_text"] = context["client_text"][::-1]
+    #         return render(request, "CS_game.html", context)
+    # except KeyError as e:
+    #     logging.warning(f"KeyError: {e} - 'client_text' not found in context.")
+
+    # try:
+    #     if context["client_url"]:
+    #         target_url = context["client_url"]
+    #         # if user inputs url, then redirect to that url            
+    #         return redirect(target_url)
+    # except KeyError as e:
+    #     logging.warning(f"KeyError: {e} - 'client_url' not found in context.")
+
+    # return render(request, "CS_game.html", context)
 
 ## version 1
 # def CS_game_view(request):
