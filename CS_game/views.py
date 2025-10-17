@@ -29,6 +29,7 @@ def CS_game_view(request):
     ## List of POST keys
     dict_keys = ["client_text", "client_url", "client_range", "client_email", "client_number"]
     dict_keys.extend(Hard_Coded_Pairs.values())  # add more keys from Hard_Coded_Pairs
+    ## append adds as single item, extend adds items 1 by 1 from iterable
     
     ## Populate context with only present, non-empty value
     for key in dict_keys:
@@ -40,6 +41,8 @@ def CS_game_view(request):
 ## version 4 - loop through submitted items
     if 1 == 1:
         submitted = {key: value for key, value in context.items() if value}
+        # context = dict ; .items() method returns view object of (key, value) pairs
+        # Example: [('brand', 'Ford'), ('model', 'Mustang'), ('year', 1964)]
     client_text = context.get("client_text")
     if client_text:
         context["reversed_text"] = client_text[::-1]
