@@ -35,12 +35,6 @@
   {% endfor %}
 {% endif %}  {% endcomment %}
 
-{% comment %} version 4 loop through submitted values {% endcomment %}
-    {% for key, value in submitted.items %}
-    <p>Client's {{ key }}: {{ value }}</p>
-    <p>Server's Response: {{ value }}</p>
-    {% endfor %} 
-
     {% if client_text %}
     <p>Client's Text: {{ client_text }}</p>
     <p>Server's Response: {{ reversed_text }}</p>
@@ -52,6 +46,10 @@
     <p>Server's Response: {{ client_password }}</p>
     {% endif %}
 
-
+{% comment %} version 4 loop through submitted values {% endcomment %}
+    {% for key, value in submitted.items %}
+    <p>Client's {{ key }}: {{ value }}</p>
+    <p>Server's Response: {{ value }}</p>
+    {% endfor %}
 </body>
 </html>
