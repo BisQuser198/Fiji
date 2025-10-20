@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CS Game 2</title>
+</head>
+<body>
+    
+{% load static %}
+
+<h2>Firm Records</h2>
+
+<!-- CREATE: blank form at top -->
+<form method="post">
+  {% csrf_token %}
+  <input type="hidden" name="action" value="create">
+  {{ form.as_p }}
+  <button type="submit">Add Employee</button>
+</form>
+
+<!-- READ: list all rows -->
+<table border="1" cellpadding="4" cellspacing="0">
+  <tr>
+    <th>Name</th><th>Dept</th><th>Mgr</th><th>Salary</th><th>Promotable</th><th>Actions</th>
+  </tr>
+  {% for emp in employees %}
+  <tr>
+    <td>{{ emp.name }}</td>
+    <td>{{ emp.department_id }}</td>
+    <td>{{ emp.manager_id }}</td>
+    <td>{{ emp.salary }}</td>
+    <td>{{ emp.promotable }}</td>
+    <td>
+  <!-- EDIT: show “Edit” button that fills hidden update form -->
+  <button type="button" onclick="edit(
+    {{ emp.id }},
+    '{{ emp.name|escapejs }}',
+    {{ emp.department_id|default:0 }},
+    {{ emp.manager_id|default:0 }},
+    {{ emp.salary|default:0 }},
+    {{ emp.promotable|yesno:'true,false' }}
+      )">Edit</button>
+
+      <!-- DELETE: inline form -->
+      <form method="post" style="display:inline">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="delete">
+        <input type="hidden" name="id" value="{{ emp.id }}">
+        <button type="submit">Delete</button>
+      </form>
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+
+<!-- UPDATE: hidden form, toggled via JS -->
+<div id="update-form" style="display:none; margin-top:1em;">
+  <h3>Edit Employee</h3>
+  <form method="post">
+    {% csrf_token %}
+    <input type="hidden" name="action" value="update">
+    <input type="hidden" id="upd-id" name="id">
+    Name:          <input type="text"   id="upd-name"          name="name"><br>
+    Dept ID:       <input type="number" id="upd-dept"          name="department_id"><br>
+    Manager ID:    <input type="number" id="upd-mgr"           name="manager_id"><br>
+    Salary:        <input type="number" step="0.01" id="upd-salary" name="salary"><br>
+    Promotable:    <input type="checkbox" id="upd-pro" name="promotable" checked="">   <br>
+    <button type="submit">Save Changes</button>
+    <button type="button" onclick="hideUpdate()">Cancel</button>
+  </form>
+</div>
+
+<script>
+// Populate & show the update form
+function edit(id, name, dept, mgr, salary, promotable) {
+  document.getElementById('update-form').style.display = 'block';
+  document.getElementById('upd-id').value     = id;
+  document.getElementById('upd-name').value   = name || '';
+  document.getElementById('upd-dept').value   = dept || '';
+  document.getElementById('upd-mgr').value    = mgr || '';
+  document.getElementById('upd-salary').value = salary || '';
+  // promotable is passed as 'true' or 'false' string; set checkbox checked accordingly
+  var proCheckbox = document.getElementById('upd-pro');
+  if (proCheckbox) {
+    proCheckbox.checked = (String(promotable) === 'true');
+  }
+}
+function hideUpdate() {
+  document.getElementById('update-form').style.display = 'none';
+}
+</script>
+
+
+</body>
+</html>

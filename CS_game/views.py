@@ -113,3 +113,37 @@ def CS_game_view(request):
     
 
 #     return render(request, "CS_game.html", context)
+
+from django.shortcuts import render, redirect
+from .models import Employee
+from .forms  import EmployeeForm
+
+def CS_game_view2(request):
+    # Handle form submissions for add / update / delete
+    if request.method == 'POST':
+        action = request.POST.get('action')
+
+        if action == 'create':
+            form = EmployeeForm(request.POST)
+            if form.is_valid():
+                form.save()             # INSERT into employee table
+                return redirect(request.path)
+
+        elif action == 'update':
+            emp = Employee.objects.get(pk=request.POST['id'])
+            form = EmployeeForm(request.POST, instance=emp)
+            if form.is_valid():
+                form.save()             # UPDATE employee row
+                return redirect(request.path)
+
+        elif action == 'delete':
+            Employee.objects.get(pk=request.POST['id']).delete()
+            return redirect(request.path)
+
+    # On GET (or after redirect), show the list and an empty form
+    employees = Employee.objects.all().order_by('id')
+    form      = EmployeeForm()         # blank form for “create”
+    return render(request, 'CS_game2.html', {
+        'employees': employees,
+        'form': form,
+    })
