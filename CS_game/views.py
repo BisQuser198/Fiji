@@ -168,12 +168,14 @@ def CS_game_view3(request):
                 x = int(process_number)          # convert input to number
                 context["client_number"] = x
                 context["function_result"] = x**2 + 1   # f(x)=x**2+1
-                
+
                 # define the axes for the plot
                 xs = list(range(int(x+1)))  
                 ys = [xi**2 + 1 for xi in xs]                 # f(x)=x**2+1
                 # create plot (figure)
-                fig, ax = plt.subplots(figsize=(6, 3.5))     # small figure
+                fig, ax = plt.subplots(figsize=(6, 3.5))     # creates figure object and one plot area
+                # fig = plt.figure(figsize=(6, 3.5)) -- container for 1+ axes
+                # ax = fig.add_subplot(1, 1, 1)        # 1 row, 1 col, subplot index 1
                 ax.plot(xs, ys, color="tab:blue")             # line
                 ax.axvline(x, color="green", linestyle="--")   # vertical line at input x
                 ax.scatter([x], [x**2 + 1], color="green")     # highlight point
@@ -182,11 +184,11 @@ def CS_game_view3(request):
                 ax.set_ylabel("f(x)")
 
                 # save figure to in-memory buffer as PNG
-                buffer = io.BytesIO()
+                buffer = io.BytesIO() # MEMORIZE: make an in-memory bynary steam you can write/read from
                 fig.tight_layout()
-                fig.savefig(buffer, format="png")
+                fig.savefig(buffer, format="png") # render & write PNG bytes into buffer
                 plt.close(fig)               # close figure to free memory
-                buffer.seek(0) # reference point to start of file
+                buffer.seek(0) # move buffer cursor to beginning (so we can read from start)
 
                 # # encode PNG to base64 for embedding in HTML
                 # img_b64 = base64.b64encode(buffer.read()).decode("ascii")
