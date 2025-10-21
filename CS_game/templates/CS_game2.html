@@ -91,6 +91,28 @@ function hideUpdate() {
 }
 </script>
 
+{% comment %} 
+Replace the long inline JS, uses helper functions (show and set), keeps all behavior client side,
+No change to view.py required
+
+<script>
+/* Show update form and fill fields with provided values */
+function edit(id, name, dept, mgr, salary, promotable) {
+  const show = (el) => el.style.display = 'block';
+  const set = (id, v) => { const e = document.getElementById(id); if (e) e.value = v ?? ''; };
+
+  show(document.getElementById('update-form'));
+  set('upd-id', id);
+  set('upd-name', name);
+  set('upd-dept', dept);
+  set('upd-mgr', mgr);
+  set('upd-salary', salary);
+
+  const pro = document.getElementById('upd-pro');
+  if (pro) pro.checked = String(promotable) === 'true';
+}
+function hideUpdate() { document.getElementById('update-form').style.display = 'none'; }
+</script> {% endcomment %}
 
 </body>
 </html>

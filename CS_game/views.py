@@ -124,9 +124,9 @@ def CS_game_view2(request):
         action = request.POST.get('action')
 
         if action == 'create':
-            form = EmployeeForm(request.POST)
+            form = EmployeeForm(request.POST) # instantiate object EmployeeForm with POST data
             if form.is_valid():
-                form.save()             # INSERT into employee table
+                form.save()             # INSERT into employee table of db.sqlite3
                 return redirect(request.path)
 
         elif action == 'update':
@@ -141,7 +141,8 @@ def CS_game_view2(request):
             return redirect(request.path)
 
     # On GET (or after redirect), show the list and an empty form
-    employees = Employee.objects.all().order_by('id')
+    employees = Employee.objects.all().order_by('id') # query DB for all rows
+    # Employee.objects.all() runs SELECT 
     form      = EmployeeForm()         # blank form for “create”
     return render(request, 'CS_game2.html', {
         'employees': employees,
