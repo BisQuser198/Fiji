@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client-Server Game 3 - Plot f(x)=x^2+1</title>
+</head>
+<body>
+    <h1>Client-Server Game 3 - Plot f(x)=x^2+1</h1>
+    <form action="" method="post">
+
+        {% csrf_token %}
+        
+    {% comment %} <p><input type="number" name="client_number" id=""> == Client's Number</p> {% endcomment %}
+      <label>
+        Number:
+        <input type="number" step="any" name="client_number" value="{% if submitted.client_number %}{{ submitted.client_number }}{% endif %}">
+      </label>
+
+    <input type="submit" value="Click me / Send request to Server!">
+
+    </form>
+
+
+{% comment %} version 4 loop through submitted values {% endcomment %}
+    {% for key, value in submitted.items %}
+    <p>Client's {{ key }}: {{ value }}</p>
+    <p>Server's Response: {{ value }}</p>
+    {% endfor %}
+
+  {% if plot_data_url %}
+    <h2>Result</h2>
+    <p>Client's Number: {{ submitted.client_number }}</p>
+    <p>Server's Response: f({{ submitted.client_number }}) = {{ submitted.client_number|floatformat:6|add:""|floatformat }}  <!-- optional display --> </p>
+    <!-- Embedded PNG plot -->
+    <img src="{{ plot_data_url }}" alt="Plot of f(x)=x^2+1">
+  {% endif %}
+
+</body>
+</html>

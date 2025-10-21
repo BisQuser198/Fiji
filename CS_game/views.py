@@ -147,3 +147,51 @@ def CS_game_view2(request):
         'employees': employees,
         'form': form,
     })
+
+
+import matplotlib.pyplot as plt      # plotting library
+import io                             # in-memory byte buffer
+import base64                         # encode image for embedding
+
+def CS_game_view3(request):
+# Read client_number from POST, compute f(x)=x**2+1, create a PNG plot, pass data-URL to template
+
+    submitted = {}        # collect submitted values for template
+    img_data_url = None   # will hold data URL if we generate a plot
+
+    if request.method == "POST":
+        # get value from form (string) and try to convert to float
+        process_number = request.POST.get("client_number")
+
+        if process_number:
+            try:
+                x = int(process_number)          # convert input to number
+                submitted["client_number"] = x
+                #print(x) ; print(submitted["client_number"])
+                # build x range around the input for plotting
+                xs = list(range(int(x+1)))  # 101 points centered on x
+                ys = [xi**2 + 1 for xi in xs]                 # f(x)=x**2+1
+                # create plot (figure)
+                fig, ax = plt.subplots(figsize=(6, 3.5))     # small figure
+                ax.plot(xs, ys, color="tab:blue")             # line
+                ax.axvline(x, color="green", linestyle="--")   # vertical line at input x
+                ax.scatter([x], [x**2 + 1], color="green")     # highlight point
+                ax.set_title(f"f(x)=x^2+1 for x in range of 1 to x={x}")     # title
+                ax.set_xlabel("x")
+                ax.set_ylabel("f(x)")
+
+                # save figure to in-memory buffer as PNG
+                buf = io.BytesIO()
+                fig.tight_layout()
+                fig.savefig(buf, format="png")
+                plt.close(fig)               # close figure to free memory
+                buf.seek(0)
+
+                # encode PNG to base64 for embedding in HTML
+                img_b64 = base64.b64encode(buf.read()).decode("ascii")
+                img_data_url = f"data:image/png;base64,{img_b64}"
+
+            except ValueError:
+                submitted["error"] = "Invalid number"
+
+    return render(request, "CS_game3.html", {"submitted": submitted, "plot_data_url": img_data_url})
