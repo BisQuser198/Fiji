@@ -38,9 +38,9 @@ def CS_game_view(request):
         if dict_value:
             context[key] = dict_value
 
-## version 4 - loop through submitted items
+## version 4 - loop through context items
     if 1 == 1:
-        submitted = {key: value for key, value in context.items() if value}
+        context = {key: value for key, value in context.items() if value}
         # context = dict ; .items() method returns view object of (key, value) pairs
         # Example: [('brand', 'Ford'), ('model', 'Mustang'), ('year', 1964)]
     client_text = context.get("client_text")
@@ -50,7 +50,7 @@ def CS_game_view(request):
     client_url = context.get("client_url")
     if client_url:
         return redirect(client_url)
-    return render(request, "CS_game.html", {"submitted": submitted, **context})
+    return render(request, "CS_game.html", {"context": context, **context})
 
 ## version 3
     client_text = context.get("client_text") # replace if context b/c key might not exist
@@ -156,7 +156,7 @@ import base64                         # encode image for embedding
 def CS_game_view3(request):
 # Read client_number from POST, compute f(x)=x**2+1, create a PNG plot, pass data-URL to template
 
-    submitted = {}        # collect submitted values for template
+    context = {}        # collect context values for template
     img_data_url = None   # will hold data URL if we generate a plot
 
     if request.method == "POST":
@@ -166,10 +166,11 @@ def CS_game_view3(request):
         if process_number:
             try:
                 x = int(process_number)          # convert input to number
-                submitted["client_number"] = x
-                #print(x) ; print(submitted["client_number"])
-                # build x range around the input for plotting
-                xs = list(range(int(x+1)))  # 101 points centered on x
+                context["client_number"] = x
+                context["function_result"] = x**2 + 1   # f(x)=x**2+1
+                
+                # define the axes for the plot
+                xs = list(range(int(x+1)))  
                 ys = [xi**2 + 1 for xi in xs]                 # f(x)=x**2+1
                 # create plot (figure)
                 fig, ax = plt.subplots(figsize=(6, 3.5))     # small figure
@@ -181,17 +182,23 @@ def CS_game_view3(request):
                 ax.set_ylabel("f(x)")
 
                 # save figure to in-memory buffer as PNG
-                buf = io.BytesIO()
+                buffer = io.BytesIO()
                 fig.tight_layout()
-                fig.savefig(buf, format="png")
+                fig.savefig(buffer, format="png")
                 plt.close(fig)               # close figure to free memory
-                buf.seek(0)
+                buffer.seek(0) # reference point to start of file
 
-                # encode PNG to base64 for embedding in HTML
-                img_b64 = base64.b64encode(buf.read()).decode("ascii")
+                # # encode PNG to base64 for embedding in HTML
+                # img_b64 = base64.b64encode(buffer.read()).decode("ascii")
+                # img_data_url = f"data:image/png;base64,{img_b64}"
+                # # step by step version
+                raw_bytes = buffer.read()
+                img_b64_bytes = base64.b64encode(raw_bytes) # encode raw bytes into a bytes obj using base64 module
+                img_b64 = img_b64_bytes.decode("ascii") # convert bytes obt into string (to concatenate into adata URL to embed in HTML)
                 img_data_url = f"data:image/png;base64,{img_b64}"
 
-            except ValueError:
-                submitted["error"] = "Invalid number"
 
-    return render(request, "CS_game3.html", {"submitted": submitted, "plot_data_url": img_data_url})
+            except ValueError:
+                context["error"] = "Invalid number"
+
+    return render(request, "CS_game3.html", {"context": context, "plot_data_url": img_data_url})

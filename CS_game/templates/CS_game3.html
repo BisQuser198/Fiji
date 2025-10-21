@@ -14,7 +14,7 @@
     {% comment %} <p><input type="number" name="client_number" id=""> == Client's Number</p> {% endcomment %}
       <label>
         Number:
-        <input type="number" step="any" name="client_number" value="{% if submitted.client_number %}{{ submitted.client_number }}{% endif %}">
+        <input type="number" step="any" name="client_number" value="{% if context.client_number %}{{ context.client_number }}{% endif %}">
       </label>
 
     <input type="submit" value="Click me / Send request to Server!">
@@ -22,16 +22,10 @@
     </form>
 
 
-{% comment %} version 4 loop through submitted values {% endcomment %}
-    {% for key, value in submitted.items %}
-    <p>Client's {{ key }}: {{ value }}</p>
-    <p>Server's Response: {{ value }}</p>
-    {% endfor %}
-
   {% if plot_data_url %}
-    <h2>Result</h2>
-    <p>Client's Number: {{ submitted.client_number }}</p>
-    <p>Server's Response: f({{ submitted.client_number }}) = {{ submitted.client_number|floatformat:6|add:""|floatformat }}  <!-- optional display --> </p>
+    <h2>Server Response</h2>
+    <p>Client's Number: {{ context.client_number }}</p>
+    <p>Server's Response: f({{ context.client_number }}) = {{ context.function_result }}  <!-- optional display --> </p>
     <!-- Embedded PNG plot -->
     <img src="{{ plot_data_url }}" alt="Plot of f(x)=x^2+1">
   {% endif %}
