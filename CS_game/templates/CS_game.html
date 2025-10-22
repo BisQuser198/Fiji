@@ -8,6 +8,26 @@
 <body>
 {% extends "core/base.html" %}
 {% block content %}
+
+  <style>
+    /* Override base/global colors only for this page content */
+    #main-content {
+      background: #ffffff;
+      color: #000000;
+      min-height: calc(100vh - 14vh);
+      padding: 2em;
+    }
+    /* Ensure form controls inherit readable colors */
+    #main-content input,
+    #main-content input[type="submit"],
+    #main-content textarea,
+    #main-content select {
+      color: #000;
+      background: #fff;
+      border: 1px solid #ccc;
+    }
+  </style>
+
     <h1>You are the Client, I am the Server</h1>
     <form action="" method="post">
 
