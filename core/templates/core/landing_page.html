@@ -63,6 +63,61 @@
       transition: background 0.3s;
     }
 
+
+/* Dropdown minimal styling (keeps navbar layout) */
+.nav-item {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+.dropbtn {
+  background: transparent;
+  border: none;
+  color: var(--black);
+  font-weight: 700;
+  font-size: 1.1rem;
+  padding: 0.5em 1em;
+  cursor: pointer;
+}
+.dropbtn:hover,
+.nav-item:focus-within .dropbtn {
+  background: var(--skyblue);
+  color: var(--white);
+  border-radius: 8px;
+}
+
+/* Hidden menu shown on hover or keyboard focus */
+.dropdown-content {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  min-width: 160px;
+  background: var(--silver);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+  border-radius: 8px;
+  display: none;
+  z-index: 50;
+}
+.dropdown-content a {
+  display: block;
+  padding: 0.5em 1em;
+  color: var(--black);
+  text-decoration: none;
+  font-weight: 700;
+}
+.dropdown-content a:hover {
+  background: var(--skyblue);
+  color: var(--white);
+}
+
+/* show on hover and when focused (keyboard accessible) */
+.nav-item:hover .dropdown-content,
+.nav-item:focus-within .dropdown-content {
+  display: block;
+}
+/* Dropdown minimal styling (keeps navbar layout) */
+
+
     /* Keyframes */
     @keyframes bgRise {
       to { bottom: 0; }
@@ -111,7 +166,16 @@
     <a href="{% url 'clone_files:clone' %}">Clone Files</a>
     <a href="{% url 'file_renamer:mass_rename' %}">File Renamer</a>
     <a href="{% url 'uploader:upload_list' %}">Uploader</a>
-    <a href="{% url 'CS_game:CS_game' %}">Client-Server Game</a>
+    {% comment %} <a href="{% url 'CS_game:CS_game' %}">Client-Server Game</a> {% endcomment %}
+    <div class="nav-item dropdown" tabindex="0" aria-haspopup="true" aria-expanded="false">
+  <button class="dropbtn">Client-Server Game ▾</button>
+  <div class="dropdown-content" role="menu" aria-label="Client-Server Game versions">
+    <a href="{% url 'CS_game:CS_game' %}">Default</a>
+    <a href="{% url 'CS_game:CS_game2' %}">Version 2</a>
+    <a href="{% url 'CS_game:CS_game3' %}">Version 3</a>
+  </div>
+</div>
+
   </nav>
 
   <!-- 4) Main Landing Content -->
