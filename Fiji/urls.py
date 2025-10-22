@@ -37,6 +37,7 @@ urlpatterns = [
     path("file_renamer/", include("file_renamer.urls", namespace="file_renamer")),
     path("uploader/", include("uploader.urls", namespace="uploader")),
     path("CS_game/", include("CS_game.urls", namespace="CS_game")),
+    path("machine_learning/", include("machine_learning.urls", namespace="machine_learning")),
 ]
 
 if settings.DEBUG:

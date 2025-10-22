@@ -1,0 +1,58 @@
+<!-- machine_learning/templates/eth_plot2.html -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>ETH Projection</title></head>
+<body>
+  <h1>ETH Price Projection</h1>
+
+  <!-- Simple control form -->
+  <form method="post">
+    {% csrf_token %}
+    <label>CSV file:
+      <select name="filename">
+        {% for f in files %}
+          <option value="{{ f }}" {% if f == filename %}selected{% endif %}>{{ f }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <br>
+
+    <label>Holdout rows (last N): 
+      <input type="number" name="holdout_n" value="{{ holdout_n }}" min="1" step="1">
+    </label>
+    <br>
+
+    <label>Slope override mode:
+      <select name="slope_mode">
+        <option value="none" {% if slope_mode == "none" %}selected{% endif %}>Use fitted slope</option>
+        <option value="mult" {% if slope_mode == "mult" %}selected{% endif %}>Multiply fitted slope</option>
+        <option value="override" {% if slope_mode == "override" %}selected{% endif %}>Replace slope</option>
+      </select>
+    </label>
+    <br>
+
+    <label>Multiplier / override value:
+      <input type="text" name="slope_value" value="{{ slope_value }}">
+      <small>(e.g. 1.2 to multiply, or 0.0001 to override)</small>
+    </label>
+    <br>
+
+    <label>Years to project:
+      <input type="number" name="years_future" value="{{ years_future }}" min="1" step="1">
+    </label>
+    <br>
+
+    <button type="submit">Generate</button>
+  </form>
+
+  <hr>
+
+  <p>Source file: {{ filename }}</p>
+
+  {% if plot_data_url %}
+    <img src="{{ plot_data_url }}" alt="ETH projection plot" style="max-width:100%; height:auto;">
+  {% else %}
+    <p>No plot produced.</p>
+  {% endif %}
+</body>
+</html>

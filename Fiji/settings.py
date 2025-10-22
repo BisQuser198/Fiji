@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'file_renamer',
     'uploader',
     'CS_game',
+    'machine_learning',
 ]
 
 MIDDLEWARE = [
