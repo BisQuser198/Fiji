@@ -264,7 +264,7 @@ def eth_plot_view2(request):
                 for row in reader:
                     if not row or len(row) < 2:
                         continue
-                    dt = datetime.strptime(row[0].strip(), "%Y-%m-%d").date()
+                    dt = datetime.strptime(row[0].strip(), "%d/%m/%Y").date()
                     prices.append(float(row[1].strip()))
                     dates.append(dt)
         except Exception as e:
