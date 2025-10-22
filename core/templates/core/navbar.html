@@ -1,0 +1,20 @@
+
+
+{% load static %}
+  <nav id="navbar">
+    <a href="{% url 'home' %}">Home</a>
+    <a href="{% url 'investments:form' %}">Investments</a>
+    <a href="{% url 'docx_replace:replace_docs' %}">DOCX Replace</a>
+    <a href="{% url 'clone_files:clone' %}">Clone Files</a>
+    <a href="{% url 'file_renamer:mass_rename' %}">File Renamer</a>
+    <a href="{% url 'uploader:upload_list' %}">Uploader</a>
+    {% comment %} <a href="{% url 'CS_game:CS_game' %}">Client-Server Game</a> {% endcomment %}
+    <div class="nav-item dropdown" tabindex="0" aria-haspopup="true" aria-expanded="false">
+  <button class="dropbtn">Client-Server Game ▾</button>
+  <div class="dropdown-content" role="menu" aria-label="Client-Server Game versions">
+    <a href="{% url 'CS_game:CS_game' %}">Default</a>
+    <a href="{% url 'CS_game:CS_game2' %}">Version 2</a>
+    <a href="{% url 'CS_game:CS_game3' %}">Version 3</a>
+  </div>
+</div>
+  </nav>

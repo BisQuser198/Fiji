@@ -6,6 +6,8 @@
     <title>Client-Server Game</title>
 </head>
 <body>
+{% extends "core/base.html" %}
+{% block content %}
     <h1>You are the Client, I am the Server</h1>
     <form action="" method="post">
 
@@ -51,5 +53,8 @@
     <p>Client's {{ key }}: {{ value }}</p>
     <p>Server's Response: {{ value }}</p>
     {% endfor %}
+    
+    
+{% endblock %}
 </body>
 </html>
