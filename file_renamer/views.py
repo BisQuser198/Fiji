@@ -19,7 +19,7 @@ def mass_rename(request):
     if request.method == 'POST':
         form = RenameForm(request.POST, request.FILES)
         if form.is_valid():
-            zip_bytes = request.FILES['zip_file'].read()
+            zip_bytes = request.FILES['zip_file'].read()  # zip_file = forms.FileField() in forms.py called by {% for field in form %} in mass_rename.html
             zip_io = io.BytesIO(zip_bytes)
             try:
                 z = zipfile.ZipFile(zip_io)
@@ -27,21 +27,21 @@ def mass_rename(request):
                 form.add_error('zip_file', 'Invalid zip file.')
                 return render(request, 'file_renamer/mass_rename.html', {'form': form})
             
-            file_list = []
+            file_list = [] # list of file names in zip
             for f in z.namelist():
                 if not f.endswith('/') and not f.startswith('__MACOSX/'):
                     file_list.append(f)
             file_list.sort()
             num_files = len(file_list)
-            if num_files == 0:
+            if num_files == 0: # check if zip has no files
                 form.add_error('zip_file', 'Zip contains no files.')
                 z.close()
                 return render(request, 'file_renamer/mass_rename.html', {'form': form})
             
             mode = form.cleaned_data['mode']
             new_bases = []
-            if mode == 'basic':
-                root = form.cleaned_data['root_label']
+            if mode == 'basic': # select basic vs custom mode
+                root = form.cleaned_data['root_label'] # extract parameters from form
                 use_pre = form.cleaned_data['use_prefix']
                 use_suf = form.cleaned_data['use_suffix']
                 start = form.cleaned_data['start_num']
@@ -51,23 +51,24 @@ def mass_rename(request):
                 if end < start:
                     form.add_error('end_num', 'End must be >= start.')
                     z.close()
-                    return render(request, 'file_renamer/mass_rename.html', {'form': form})
+                    return render(request, 'file_renamer/mass_rename.html', {'form': form}) # extracted parameters from form
                 calc_count = end - start + 1
                 if calc_count != num_files:
                     form.add_error('end_num', f'Range {start}-{end} covers {calc_count} items, but zip has {num_files} files.')
                     z.close()
                     return render(request, 'file_renamer/mass_rename.html', {'form': form})
+                # generate new names
                 for i in range(num_files):
                     num_str = str(start + i)
                     parts = []
-                    if use_pre:
+                    if use_pre: # if prefix checkbox is checked
                         parts.append(num_str)
                     parts.append(root)
-                    if use_suf:
+                    if use_suf: # if suffix checkbox is checked
                         parts.append(num_str)
                     new_base = ''.join(parts)
                     new_bases.append(new_base)
-            else:  # custom
+            else:  # custom rule
                 custom_rule = form.cleaned_data['custom_rule']
                 groups = []
                 total_count = 0
@@ -136,7 +137,7 @@ def mass_rename(request):
                 return render(request, 'file_renamer/mass_rename.html', {'form': form})
             
             # Create new zip in memory.
-            output_io = io.BytesIO()
+            output_io = io.BytesIO() # is an in-memory byte buffer.
             new_z = zipfile.ZipFile(output_io, mode='w', compression=zipfile.ZIP_DEFLATED)
             for i, orig_path in enumerate(file_list):
                 f_in = z.open(orig_path)
@@ -148,12 +149,18 @@ def mass_rename(request):
             new_z.close()
             z.close()
             
-            # Prepare response.
+            # Prepare HTTP response.
             output_io.seek(0)
             zip_content = output_io.read()
-            response = HttpResponse(zip_content, content_type='application/zip')
+            response = HttpResponse(zip_content, content_type='application/zip') # wrap in HTTP response
             response['Content-Disposition'] = 'attachment; filename="renamed.zip"'
-            return response
+            return response # if form is valid return response = HTTPResponse(zip_content, content_type='application/zip')
+# Response flow: Request --> view --> HttpResponse --> Client / Browser
+# browser sets POST request to django url, which dispatches to mass_rename view, which returns the HttPResponse (the response = HttpResponse)
+# Django’s server stack (framework internals) send back the HttpResponse to the client. 
+# Client receives the HTTP response; BECAUSE THE CONTENT HAS Content--Disposition: and content_type='application/zip', the browser 
+# opens a dialog box to save the zip.
+# Nothing in forms.py or mass_rename.html “receives” the HttpResponse. The django framework delivers the response to the user.
     else:
         form = RenameForm()
     
